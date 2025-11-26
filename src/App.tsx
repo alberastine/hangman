@@ -40,9 +40,10 @@ function App() {
     const [customWords, setCustomWords] = useState<WordEntry[]>(DEFAULT_WORDS);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [guessedWords, setGuessedWords] = useState<Set<string>>(new Set());
-    const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
+    const [guessedLetters, setGuessedLetters] = useState<Set<string>>(
+        new Set()
+    );
 
-    // ✅ Initialize revealedLetters directly with the first word
     const [revealedLetters, setRevealedLetters] = useState<Set<string>>(() => {
         const word = customWords[0].word.toUpperCase();
         return getRandomRevealedLetters(word);
@@ -83,7 +84,9 @@ function App() {
     const addGuessedLetter = useCallback(
         (letter: string) => {
             if (gameStatus !== 'Playing') return;
-            setGuessedLetters((prev) => new Set([...prev, letter.toUpperCase()]));
+            setGuessedLetters(
+                (prev) => new Set([...prev, letter.toUpperCase()])
+            );
         },
         [gameStatus]
     );
@@ -100,7 +103,6 @@ function App() {
     const handleNextWord = useCallback(() => {
         if (guessedWords.size >= customWords.length) {
             alert('🎉 You have guessed all words! Play again?');
-            // Reset everything
             setGuessedWords(new Set());
             setCurrentWordIndex(0);
             const firstWord = customWords[0].word.toUpperCase();
@@ -130,11 +132,12 @@ function App() {
         setCustomWords(words);
         setShowCustomInput(false);
         setGuessedLetters(new Set());
-        setRevealedLetters(getRandomRevealedLetters(words[0].word.toUpperCase()));
+        setRevealedLetters(
+            getRandomRevealedLetters(words[0].word.toUpperCase())
+        );
         setCurrentWordIndex(0);
     }, []);
 
-    // Physical keyboard support
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
             const key = e.key.toUpperCase();
@@ -155,7 +158,17 @@ function App() {
 
     if (showCustomInput) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+            <div
+                style={{
+                    minHeight: '100vh',
+                    background:
+                        'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '1rem',
+                }}
+            >
                 <CustomWordInput
                     initialWords={customWords}
                     onSubmit={handleCustomWordsSubmit}
@@ -166,30 +179,103 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-            <div className="w-full max-w-4xl">
-                <div className="text-center mb-8">
-                    <h1 className="text-blue-900 mb-4">Shaina's Hangman Game</h1>
+        <div
+            style={{
+                minHeight: '100vh',
+                background:
+                    'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1rem',
+            }}
+        >
+            <div style={{ width: '100%', maxWidth: '64rem' }}>
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <h1 style={{ color: '#1e3a8a', marginBottom: '1rem' }}>
+                        Shaina's Hangman Game
+                    </h1>
                     <button
                         onClick={() => setShowCustomInput(true)}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                        style={{
+                            padding: '0.5rem 1rem',
+                            backgroundColor: '#4f46e5',
+                            color: '#fff',
+                            borderRadius: '0.5rem',
+                            cursor: 'pointer',
+                            border: 'none',
+                        }}
                     >
                         Customize Words
                     </button>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-2xl p-8 mb-6">
-                    <div className="mb-4 text-center w-full">
-                        <div className="bg-blue-100 rounded-xl p-4 flex justify-center items-center">
-                            <p className="text-[96px] font-bold text-blue-900 text-center leading-tight">
+                <div
+                    style={{
+                        backgroundColor: '#fff',
+                        borderRadius: '2rem',
+                        boxShadow: '0 25px 50px rgba(0,0,0,0.1)',
+                        padding: '2rem',
+                        marginBottom: '1.5rem',
+                    }}
+                >
+                    <div
+                        style={{
+                            marginBottom: '0.5rem',
+                            textAlign: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: '#bfdbfe',
+                                borderRadius: '1rem',
+                                padding: '1rem',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <p
+                                style={{
+                                    fontSize: '25px',
+                                    fontWeight: '700',
+                                    color: '#1e3a8a',
+                                    lineHeight: '1',
+                                    textAlign: 'center',
+                                    margin: 0,
+                                }}
+                            >
                                 💡 Hint: {hint}
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row items-center justify-center gap-8 mb-8">
+                    <div
+                        style={{
+                            textAlign: 'center',
+                            color: '#4b5563',
+                        }}
+                    >
+                        <p>
+                            Incorrect Guesses: {incorrectGuesses} /{' '}
+                            {maxIncorrectGuesses}
+                        </p>
+                    </div>
+
+                    <div
+                        style={{
+                            display: 'flex',
+                            // flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '2rem',
+                            marginBottom: '2rem',
+                        }}
+                    >
                         <HangmanDrawing incorrectGuesses={incorrectGuesses} />
-                        <div className="flex-1 w-full">
+                        <div style={{ flex: 1, width: '100%' }}>
                             <WordToGuess
                                 word={secretWord}
                                 guessedLetters={guessedLetters}
@@ -198,17 +284,39 @@ function App() {
                             />
 
                             {gameStatus !== 'Playing' && (
-                                <div className="mt-6 text-center">
+                                <div
+                                    style={{
+                                        marginTop: '1.5rem',
+                                        textAlign: 'center',
+                                    }}
+                                >
                                     <div
-                                        className={`text-2xl mb-4 ${
-                                            isWinner ? 'text-green-600' : 'text-red-600'
-                                        }`}
+                                        style={{
+                                            fontSize: '1.5rem',
+                                            marginBottom: '1rem',
+                                            color: isWinner
+                                                ? '#16a34a'
+                                                : '#dc2626',
+                                        }}
                                     >
-                                        {isWinner ? '🎉 Nice Work!' : '💀 Game Over!'}
+                                        {isWinner
+                                            ? '🎉 Nice Work!'
+                                            : '💀 Game Over!'}
                                     </div>
                                     <button
-                                        onClick={isWinner ? handleNextWord : resetGame}
-                                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                        onClick={
+                                            isWinner
+                                                ? handleNextWord
+                                                : resetGame
+                                        }
+                                        style={{
+                                            padding: '0.75rem 1.5rem',
+                                            backgroundColor: '#2563eb',
+                                            color: '#fff',
+                                            borderRadius: '0.5rem',
+                                            cursor: 'pointer',
+                                            border: 'none',
+                                        }}
                                     >
                                         {isWinner ? 'Next Word' : 'Play Again'}
                                     </button>
@@ -224,24 +332,28 @@ function App() {
                         disabled={gameStatus !== 'Playing'}
                     />
 
-                    <div className="mt-4 flex justify-center gap-4">
+                    <div
+                        style={{
+                            marginTop: '1rem',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1rem',
+                        }}
+                    >
                         <button
                             onClick={handleNextWord}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            style={{
+                                padding: '0.75rem 1.5rem',
+                                backgroundColor: '#2563eb',
+                                color: '#fff',
+                                borderRadius: '0.5rem',
+                                cursor: 'pointer',
+                                border: 'none',
+                            }}
                         >
                             Skip to Next Word
                         </button>
                     </div>
-
-                    <div className="mt-6 text-center text-gray-600">
-                        <p>
-                            Incorrect Guesses: {incorrectGuesses} / {maxIncorrectGuesses}
-                        </p>
-                    </div>
-                </div>
-
-                <div className="text-center text-gray-700">
-                    <p>Use your keyboard or click the letters below to guess!</p>
                 </div>
             </div>
         </div>
