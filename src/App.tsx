@@ -40,12 +40,14 @@ function App() {
     const [customWords, setCustomWords] = useState<WordEntry[]>(DEFAULT_WORDS);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [guessedWords, setGuessedWords] = useState<Set<string>>(new Set());
-    const [guessedLetters, setGuessedLetters] = useState<Set<string>>(
-        new Set()
-    );
-    const [revealedLetters, setRevealedLetters] = useState<Set<string>>(
-        new Set()
-    );
+    const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
+
+    // ✅ Initialize revealedLetters directly with the first word
+    const [revealedLetters, setRevealedLetters] = useState<Set<string>>(() => {
+        const word = customWords[0].word.toUpperCase();
+        return getRandomRevealedLetters(word);
+    });
+
     const [showCustomInput, setShowCustomInput] = useState(false);
 
     const maxIncorrectGuesses = 6;
@@ -81,9 +83,7 @@ function App() {
     const addGuessedLetter = useCallback(
         (letter: string) => {
             if (gameStatus !== 'Playing') return;
-            setGuessedLetters(
-                (prev) => new Set([...prev, letter.toUpperCase()])
-            );
+            setGuessedLetters((prev) => new Set([...prev, letter.toUpperCase()]));
         },
         [gameStatus]
     );
@@ -130,9 +130,7 @@ function App() {
         setCustomWords(words);
         setShowCustomInput(false);
         setGuessedLetters(new Set());
-        setRevealedLetters(
-            getRandomRevealedLetters(words[0].word.toUpperCase())
-        );
+        setRevealedLetters(getRandomRevealedLetters(words[0].word.toUpperCase()));
         setCurrentWordIndex(0);
     }, []);
 
@@ -171,9 +169,7 @@ function App() {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-4xl">
                 <div className="text-center mb-8">
-                    <h1 className="text-blue-900 mb-4">
-                        Shaina's Hangman Game
-                    </h1>
+                    <h1 className="text-blue-900 mb-4">Shaina's Hangman Game</h1>
                     <button
                         onClick={() => setShowCustomInput(true)}
                         className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
@@ -205,21 +201,13 @@ function App() {
                                 <div className="mt-6 text-center">
                                     <div
                                         className={`text-2xl mb-4 ${
-                                            isWinner
-                                                ? 'text-green-600'
-                                                : 'text-red-600'
+                                            isWinner ? 'text-green-600' : 'text-red-600'
                                         }`}
                                     >
-                                        {isWinner
-                                            ? '🎉 Nice Work!'
-                                            : '💀 Game Over!'}
+                                        {isWinner ? '🎉 Nice Work!' : '💀 Game Over!'}
                                     </div>
                                     <button
-                                        onClick={
-                                            isWinner
-                                                ? handleNextWord
-                                                : resetGame
-                                        }
+                                        onClick={isWinner ? handleNextWord : resetGame}
                                         className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                                     >
                                         {isWinner ? 'Next Word' : 'Play Again'}
@@ -247,16 +235,13 @@ function App() {
 
                     <div className="mt-6 text-center text-gray-600">
                         <p>
-                            Incorrect Guesses: {incorrectGuesses} /{' '}
-                            {maxIncorrectGuesses}
+                            Incorrect Guesses: {incorrectGuesses} / {maxIncorrectGuesses}
                         </p>
                     </div>
                 </div>
 
                 <div className="text-center text-gray-700">
-                    <p>
-                        Use your keyboard or click the letters below to guess!
-                    </p>
+                    <p>Use your keyboard or click the letters below to guess!</p>
                 </div>
             </div>
         </div>
