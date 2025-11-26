@@ -50,6 +50,7 @@ function App() {
     });
 
     const [showCustomInput, setShowCustomInput] = useState(false);
+    const [showGameOverModal, setShowGameOverModal] = useState(false);
 
     const maxIncorrectGuesses = 6;
 
@@ -102,7 +103,10 @@ function App() {
 
     const handleNextWord = useCallback(() => {
         if (guessedWords.size >= customWords.length) {
-            alert('🎉 You have guessed all words! Play again?');
+            if (guessedWords.size >= customWords.length) {
+                setShowGameOverModal(true);
+                return;
+            }
             setGuessedWords(new Set());
             setCurrentWordIndex(0);
             const firstWord = customWords[0].word.toUpperCase();
@@ -267,7 +271,6 @@ function App() {
                     <div
                         style={{
                             display: 'flex',
-                            // flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '2rem',
@@ -356,6 +359,84 @@ function App() {
                     </div>
                 </div>
             </div>
+            {showGameOverModal && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000,
+                    }}
+                >
+                    <div
+                        style={{
+                            backgroundColor: '#fff',
+                            borderRadius: '1rem',
+                            padding: '2rem',
+                            textAlign: 'center',
+                            minWidth: '300px',
+                            maxWidth: '90%',
+                        }}
+                    >
+                        <p
+                            style={{
+                                fontWeight: 'bold',
+                                fontSize: '18px',
+                                marginBottom: '1.5rem',
+                            }}
+                        >
+                            🎉 You have guessed all words! What do you want to
+                            do?
+                        </p>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                gap: '1rem',
+                            }}
+                        >
+                            <button
+                                onClick={() => {
+                                    setShowCustomInput(true);
+                                    setShowGameOverModal(false);
+                                }}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#4f46e5',
+                                    color: '#fff',
+                                    borderRadius: '0.5rem',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                Customize New Words
+                            </button>
+                            <button
+                                onClick={() => {
+                                    resetGame();
+                                    setShowGameOverModal(false);
+                                }}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    backgroundColor: '#2563eb',
+                                    color: '#fff',
+                                    borderRadius: '0.5rem',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                Play Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
