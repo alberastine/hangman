@@ -135,6 +135,7 @@ function App() {
     const handleCustomWordsSubmit = useCallback((words: WordEntry[]) => {
         setCustomWords(words);
         setShowCustomInput(false);
+        setGuessedWords(new Set());
         setGuessedLetters(new Set());
         setRevealedLetters(
             getRandomRevealedLetters(words[0].word.toUpperCase())
