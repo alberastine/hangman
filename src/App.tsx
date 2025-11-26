@@ -10,11 +10,10 @@ export interface WordEntry {
 }
 
 const DEFAULT_WORDS: WordEntry[] = [
-  { word: 'JAVASCRIPT', hint: 'A popular programming language' },
-  { word: 'TYPESCRIPT', hint: 'JavaScript with types' },
-  { word: 'REACT', hint: 'A JavaScript library for building UIs' },
-  { word: 'COMPONENT', hint: 'A reusable piece of UI' },
-  { word: 'HANGMAN', hint: 'The game you are playing right now' },
+  { word: 'ALLITERATION', hint: 'Peter Piper picked a peck of pickled peppers' },
+  { word: 'REPETITION', hint: '“Break, break, break,”' },
+  { word: 'ONOMATOPOEIA', hint: '“Baa, baa, black sheep, Have you any wool? Yes sir, yes sir, three bags full.”' },
+  { word: 'RHYME', hint: '"Tyger Tyger, burning bright, In the forests of the night;"' },
 ];
 
 function App() {

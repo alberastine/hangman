@@ -73,9 +73,10 @@ export function CustomWordInput({
 
     const addExample = () => {
         const examples = [
-            'OCEAN:Large body of salt water',
-            'MOUNTAIN:Tall natural elevation of the earth',
-            'RAINBOW:Colorful arc in the sky after rain',
+            'ALLITERATION:Peter Piper picked a peck of pickled peppers',
+            'REPETITION:“Break, break, break,”',
+            'ONOMATOPOEIA:“Baa, baa, black sheep, Have you any wool? Yes sir, yes sir, three bags full.” ',
+            'RHYME:"Tyger Tyger, burning bright, In the forests of the night;"',
         ];
         setInputText((prev) => {
             const newText = prev.trim()
