@@ -1,15 +1,21 @@
 interface WordToGuessProps {
   word: string;
   guessedLetters: Set<string>;
+  revealedLetters?: Set<string>;
   reveal?: boolean;
 }
 
-export function WordToGuess({ word, guessedLetters, reveal = false }: WordToGuessProps) {
+export function WordToGuess({
+  word,
+  guessedLetters,
+  revealedLetters = new Set(),
+  reveal = false,
+}: WordToGuessProps) {
   return (
     <div className="flex flex-wrap justify-center gap-2 mb-4">
       {word.split('').map((letter, index) => {
         const isGuessed = guessedLetters.has(letter);
-        const shouldShow = isGuessed || reveal;
+        const shouldShow = isGuessed || revealedLetters.has(letter) || reveal;
 
         return (
           <div
