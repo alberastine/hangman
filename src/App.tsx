@@ -51,6 +51,7 @@ function App() {
 
     const [showCustomInput, setShowCustomInput] = useState(false);
     const [showGameOverModal, setShowGameOverModal] = useState(false);
+    const [skipEnabled, setSkipEnabled] = useState(true);
 
     const maxIncorrectGuesses = 6;
 
@@ -102,6 +103,7 @@ function App() {
     }, [customWords]);
 
     const handleNextWord = useCallback(() => {
+        setSkipEnabled(true);
         if (guessedWords.size >= customWords.length) {
             if (guessedWords.size >= customWords.length) {
                 setShowGameOverModal(true);
@@ -160,6 +162,12 @@ function App() {
             setGuessedWords((prev) => new Set(prev).add(secretWord));
         }
     }, [isWinner, secretWord]);
+
+    useEffect(() => {
+        if (isWinner) {
+            setSkipEnabled(false);
+        }
+    }, [isWinner]);
 
     if (showCustomInput) {
         return (
@@ -346,13 +354,17 @@ function App() {
                     >
                         <button
                             onClick={handleNextWord}
+                            disabled={!skipEnabled}
                             style={{
                                 padding: '0.75rem 1.5rem',
-                                backgroundColor: '#2563eb',
+                                backgroundColor: skipEnabled
+                                    ? '#2563eb'
+                                    : '#93c5fd',
                                 color: '#fff',
                                 borderRadius: '0.5rem',
-                                cursor: 'pointer',
+                                cursor: skipEnabled ? 'pointer' : 'not-allowed',
                                 border: 'none',
+                                opacity: skipEnabled ? 1 : 0.6,
                             }}
                         >
                             Skip to Next Word
