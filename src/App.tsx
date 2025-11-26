@@ -419,6 +419,7 @@ function App() {
                             </button>
                             <button
                                 onClick={() => {
+                                    setGuessedWords(new Set());
                                     resetGame();
                                     setShowGameOverModal(false);
                                 }}
