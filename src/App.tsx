@@ -37,7 +37,18 @@ function getRandomRevealedLetters(word: string): Set<string> {
 }
 
 function App() {
-    const [customWords, setCustomWords] = useState<WordEntry[]>(DEFAULT_WORDS);
+    const [customWords, setCustomWords] = useState<WordEntry[]>(() => {
+        const stored = localStorage.getItem('customWords');
+        if (stored) {
+            try {
+                return JSON.parse(stored) as WordEntry[];
+            } catch {
+                return DEFAULT_WORDS;
+            }
+        }
+        return DEFAULT_WORDS;
+    });
+
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [guessedWords, setGuessedWords] = useState<Set<string>>(new Set());
     const [guessedLetters, setGuessedLetters] = useState<Set<string>>(
@@ -134,8 +145,19 @@ function App() {
         setGuessedLetters(new Set());
     }, [customWords, guessedWords, currentWordIndex]);
 
+    const resetToDefaultWords = () => {
+        setCustomWords(DEFAULT_WORDS);
+        localStorage.removeItem('customWords');
+        setCurrentWordIndex(0);
+        setGuessedLetters(new Set());
+        setRevealedLetters(
+            getRandomRevealedLetters(DEFAULT_WORDS[0].word.toUpperCase())
+        );
+    };
+
     const handleCustomWordsSubmit = useCallback((words: WordEntry[]) => {
         setCustomWords(words);
+        localStorage.setItem('customWords', JSON.stringify(words));
         setShowCustomInput(false);
         setGuessedWords(new Set());
         setGuessedLetters(new Set());
@@ -186,6 +208,7 @@ function App() {
                     initialWords={customWords}
                     onSubmit={handleCustomWordsSubmit}
                     onCancel={() => setShowCustomInput(false)}
+                    onReset={resetToDefaultWords}
                 />
             </div>
         );

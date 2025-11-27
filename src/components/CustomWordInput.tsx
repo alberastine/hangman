@@ -5,12 +5,14 @@ interface CustomWordInputProps {
     initialWords: WordEntry[];
     onSubmit: (words: WordEntry[]) => void;
     onCancel: () => void;
+    onReset: () => void;
 }
 
 export function CustomWordInput({
     initialWords,
     onSubmit,
     onCancel,
+    onReset,
 }: CustomWordInputProps) {
     const [inputText, setInputText] = useState(() => {
         return initialWords
@@ -86,6 +88,11 @@ export function CustomWordInput({
         });
     };
 
+    const handleResetAndClose = () => {
+        onReset();
+        onCancel();
+    };
+
     return (
         <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl p-8">
             <h2 className="text-blue-900 mb-6">Customize Word List</h2>
@@ -129,6 +136,12 @@ export function CustomWordInput({
                     className="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
                 >
                     Cancel
+                </button>
+                <button
+                    onClick={handleResetAndClose}
+                    className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                >
+                    Reset to Default Words
                 </button>
                 <button
                     onClick={handleSubmit}
