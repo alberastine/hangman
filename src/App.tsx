@@ -193,6 +193,7 @@ function App() {
 
     return (
         <div
+            className="main-container"
             style={{
                 minHeight: '100vh',
                 background:
@@ -204,9 +205,12 @@ function App() {
                 padding: '1rem',
             }}
         >
-            <div style={{ width: '100%', maxWidth: '64rem' }}>
-                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <h1 style={{ color: '#1e3a8a', marginBottom: '1rem' }}>
+            <div
+                className="child-container"
+                style={{ width: '100%', maxWidth: '80rem' }}
+            >
+                <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                    <h1 style={{ color: '#1e3a8a', marginBottom: '0.5rem' }}>
                         Shaina's Hangman Game
                     </h1>
                     <button
@@ -225,12 +229,14 @@ function App() {
                 </div>
 
                 <div
+                    className="guess-word-container"
                     style={{
                         backgroundColor: '#fff',
                         borderRadius: '2rem',
                         boxShadow: '0 25px 50px rgba(0,0,0,0.1)',
                         padding: '2rem',
                         marginBottom: '1.5rem',
+                        width: '100%',
                     }}
                 >
                     <div
@@ -252,7 +258,7 @@ function App() {
                         >
                             <p
                                 style={{
-                                    fontSize: '25px',
+                                    fontSize: '35px',
                                     fontWeight: '700',
                                     color: '#1e3a8a',
                                     lineHeight: '1',
@@ -372,6 +378,7 @@ function App() {
                     </div>
                 </div>
             </div>
+            {/* MODAL */}
             {showGameOverModal && (
                 <div
                     style={{
